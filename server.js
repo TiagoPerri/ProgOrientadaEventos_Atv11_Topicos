@@ -18,11 +18,18 @@ const books = [
     }
 ];
 
+const dados = {
+    getRequisicao: 0,
+    postRequisicao: 0
+}
+
 app.get('/books', (req, res) => {
+    dados.getRequisicao++;
     res.send(books);
 });
 
 app.post('/books', (req, res) => {
+    dados.postRequisicao++;
     const newBook = req.body;
     if (books.findIndex(b => b.ID === newBook.ID) !== -1) {
         res.status(500).send('Existing book ID');
@@ -34,6 +41,7 @@ app.post('/books', (req, res) => {
 });
 
 app.get('/books/:bookId', (req, res) => {
+    dados.getRequisicao++;
     const bookId = parseInt(req.params.bookId);
     if (isNaN(bookId)) {
         res.status(500).send('Non integer');
@@ -47,6 +55,11 @@ app.get('/books/:bookId', (req, res) => {
     }
 
     res.send(book);
+});
+
+app.get('/log', (req, res) => {
+    dados.getRequisicao++;
+    res.send(dados);
 });
 
 app.listen(3000, () => {
